@@ -30,7 +30,7 @@ public class RequestLimitContract {
 
 
 
-    private Map<String, Integer> redisTemplate = new HashMap<>();
+    private Map<String, Integer> redisTemplate = new HashMap<>();//记录每个接口的访问次数
 
     @Pointcut("@annotation(RequestLimit)")
     public void RequestLimit(){
@@ -70,7 +70,7 @@ public class RequestLimitContract {
             System.out.println(count + ":" + key);
             if (count > rateLimiter.count()) {
                 //logger.info("超过了限定的次数[" + limit.count() + "]");\
-//                return new RequestLimitException("429: Too many requests");
+//                return new RequestLimitException("429: Too many requests").getMessage();
                 throw new RequestLimitException();
             }else {
                 Timer timer = new Timer();
