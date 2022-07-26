@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Code') {
             agent {
-                label 'main'
+                label 'master'
             }
             steps {//第一步：克隆代码，为了build image
                 echo "1. Git Clone Stage"
@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Image Build') {//第三步：构建镜像
             agent {
-                label 'main'
+                label 'master'
             }
             steps {
                 echo "3. Image Build Stage"
@@ -35,7 +35,7 @@ pipeline {
         }
         stage('Push') {//第四步：推送镜像
             agent {
-                label 'main'
+                label 'master'
             }
             steps {
                 echo "4. Push Docker Image Stage"
@@ -53,7 +53,7 @@ node('slave') {
         }
         stage('Clone YAML') {//第五步：拉取代码，为了部署到k8s
             echo "5. Git clone YAML To Slave"
-            git url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
+            git branch: 'main', url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
 
         }
         stage('YAML') {//第六步：替换YAML文件变量
