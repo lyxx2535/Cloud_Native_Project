@@ -6,18 +6,19 @@ pipeline {
                 label 'master'
 
             }
-            steps {
+            steps { //第一步：从github上拉取代码
                 echo "1. Git Clone Stage"
                 git url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
 
             }
 
         }
-        stage('Maven Build') {
+        stage('Maven Build') { //第二步：maven打包
             agent {
                 docker {
                     image 'maven:latest'
-                    args '-v /root/.m2:/root/.m2'
+                    args '-v /root/.m2:/root/.m2' //把本地的 /root/.m2 挂载到容器的 /root/.m2目录下
+
 
                 }
 
@@ -29,7 +30,7 @@ pipeline {
             }
 
         }
-        stage('Image Build') {
+        stage('Image Build') { //第三步：构建镜像
             agent {
                 label 'master'
 
@@ -37,12 +38,13 @@ pipeline {
             steps {
                 echo "3. Image Build Stage"
                 sh 'docker build -f Dockerfile --build-arg jar_name=target/cloud-native-project-0.0.1-SNAPSHOT.jar -t cloud-native-project:${BUILD_ID} . '
+                //打tag是为了上传到harbor镜像仓库，可以随时使用
                 sh 'docker tag cloud-native-project:${BUILD_ID} harbor.edu.cn/nju04/cloud-native-project:${BUILD_ID}'
 
             }
 
         }
-        stage('Push') {
+        stage('Push') { //第四步：推送镜像
             agent {
                 label 'master'
 
