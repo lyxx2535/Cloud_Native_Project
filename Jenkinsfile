@@ -72,7 +72,7 @@ node('slave') {
             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project-serviceMonitor.yaml'
 
         }
-        stage('RTF Test'){
+        stage('RTF Test'){//单元测试
             echo "RTF Test Stage"
             sh 'kubectl apply -f ./jenkins/scripts/rtf.yaml -n nju04'
         }
