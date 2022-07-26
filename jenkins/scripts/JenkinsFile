@@ -7,7 +7,7 @@ pipeline {
             }
             steps {//第一步：克隆代码，为了build image
                 echo "1. Git Clone Stage"
-                git branch: 'master', url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
+                git branch: 'main', url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
             }
         }
         stage('Maven Build') {//第二步：maven打包
@@ -70,8 +70,6 @@ node('slave') {
         stage('RTF Test'){
             echo "RTF Test Stage"
             sh 'kubectl apply -f ./jenkins/scripts/rtf.yaml -n nju04'
-
         }
     }
-
 }
