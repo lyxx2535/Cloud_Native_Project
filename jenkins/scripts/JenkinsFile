@@ -6,14 +6,14 @@ pipeline {
                 label 'master'
 
             }
-            steps { //第一步：从github上拉取代码
+            steps {//第一步：克隆代码，为了build image
                 echo "1. Git Clone Stage"
                 git url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
 
             }
 
         }
-        stage('Maven Build') { //第二步：maven打包
+        stage('Maven Build') {//第二步：maven打包
             agent {
                 docker {
                     image 'maven:latest'
@@ -30,7 +30,7 @@ pipeline {
             }
 
         }
-        stage('Image Build') { //第三步：构建镜像
+        stage('Image Build') {//第三步：构建镜像
             agent {
                 label 'master'
 
@@ -44,7 +44,7 @@ pipeline {
             }
 
         }
-        stage('Push') { //第四步：推送镜像
+        stage('Push') {//第四步：推送镜像
             agent {
                 label 'master'
 
@@ -67,17 +67,18 @@ node('slave') {
         stage('connect'){
             sh 'curl "http://p.nju.edu.cn/portal_io/login" --data "username=201250215&password=lyx20020305"'
         }
-        stage('Git Clone') {
+        stage('Clone YAML') {//第五步：拉取代码，为了部署到k8s
+            echo "5. Git clone YAML To Slave"
             git url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
 
         }
-        stage('YAML') {
-            echo "5. Change YAML File Stage"
+        stage('YAML') {//第六步：替换YAML文件变量
+            echo "6. Change YAML File Stage"
             sh 'sed -i "s#{VERSION}#${BUILD_ID}#g" ./jenkins/scripts/cloud-native-project.yaml'
 
         }
-        stage('Deploy') {
-            echo "6. Deploy To K8s Stage"
+        stage('Deploy') {//第七步：部署
+            echo "7. Deploy To K8s Stage"
             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project.yaml -n nju04'
             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project-serviceMonitor.yaml'
 
