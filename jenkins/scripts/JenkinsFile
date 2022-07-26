@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Image Build') {//第三步：构建镜像
             agent {
-                label 'master'
+                label 'main'
             }
             steps {
                 echo "3. Image Build Stage"
