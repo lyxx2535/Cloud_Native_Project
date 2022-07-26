@@ -1,10 +1,7 @@
 pipeline {
     agent none
     stages {
-        stage('Clone to master') {
-            agent {
-                label 'master'
-            }
+        stage('Clone Code') {
             steps {//第一步：克隆代码，为了build image
                 echo "1. Git Clone Stage"
                 git branch: 'main', url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
