@@ -39,7 +39,7 @@ spec:
     app: cloud-native-project
   ports:
   - name: tcp
-    nodePort: 30503
+    nodePort: 31005
     protocol: TCP
     port: 8080
     targetPort: 8080
