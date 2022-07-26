@@ -1,9 +1,9 @@
 pipeline {
     agent none
     stages {
-        stage('Clone to master') {
+        stage('Clone to main') {
             agent {
-                label 'master'
+                label 'main'
 
             }
             steps {//第一步：克隆代码，为了build image
