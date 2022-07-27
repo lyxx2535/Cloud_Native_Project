@@ -1,12 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployment #对象类型
 metadata:
   labels:
     app: cloud-native-project
   name: cloud-native-project
-  namespace: cn202006
+  namespace: nju04
 spec:
-  replicas: 1
+  replicas: 1 #运行容器的副本数
   selector:
     matchLabels:
       app: cloud-native-project
@@ -20,17 +20,17 @@ spec:
       labels:
         app: cloud-native-project
     spec:
-      containers:
-      - image: harbor.edu.cn/cn202006/cloud-native-project:{VERSION}
+      containers: #docker容器的配置
+      - image: harbor.edu.cn/nju04/cloud-native-project:{VERSION} #pull镜像的地址
         name: cloud-native-project
       imagePullSecrets:
-        - name: cn202006
+        - name: nju04
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: cloud-native-project
-  namespace: cn202006
+  namespace: nju04
   labels:
     app: cloud-native-project
 spec:
@@ -39,7 +39,7 @@ spec:
     app: cloud-native-project
   ports:
   - name: tcp
-    nodePort: 40000
+    nodePort: 31005
     protocol: TCP
     port: 8080
     targetPort: 8080

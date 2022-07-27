@@ -21,56 +21,29 @@ import java.util.*;
 @Component
 public class RequestLimitContract {
 
-//    private static final Logger logger = LoggerFactory.getLogger("RequestLimitLogger");
-//    @Autowired
-//    private RedisTemplate redisTemplate = new RedisTemplate();
-
-//    @Resource
-//    RedisTemplate<String,Object> redisTemplate;
-
-
-
-    private Map<String, Integer> redisTemplate = new HashMap<>();
+    private Map<String, Integer> redisTemplate = new HashMap<>();//记录每个接口的访问次数
 
     @Pointcut("@annotation(RequestLimit)")
     public void RequestLimit(){
 
     }
 
-//    @Before("within(@org.springframework.stereotype.Controller *) && @annotation(limit)")
     @Around("RequestLimit()")
     public synchronized Object requestLimit(ProceedingJoinPoint joinPoint) throws Throwable {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-//        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        // 或者url(存在map集合的key)
+
         String url = request.getRequestURI();
         // 获取自定义注解
         RequestLimit rateLimiter = getRequestLimit(joinPoint);
-//        System.out.println(url);
-//        System.out.println(rateLimiter.count());
-//        System.out.println(rateLimiter.time());
-
-
-//        Jedis jedis = new Jedis("localhost");
-//        if(jedis.get(key) == null){
-//            jedis.set(key, "1");
-//        }else{
-//            jedis.set(key, String.valueOf(Integer.parseInt(jedis.get(key)) + 1));
-//        }
-//        int count = Integer.parseInt(jedis.get(key));
 
         String key = "req_limit_".concat(url); //hash的key
         if (!redisTemplate.containsKey(key)) { //接口未访问过
             redisTemplate.put(key, 1);
-            System.out.println("1:" + key);
         } else {
             redisTemplate.put(key, redisTemplate.get(key) + 1);
             int count = redisTemplate.get(key);
-            System.out.println(count + ":" + key);
             if (count > rateLimiter.count()) {
-                //logger.info("超过了限定的次数[" + limit.count() + "]");\
-//                return new RequestLimitException("429: Too many requests");
                 throw new RequestLimitException();
             }else {
                 Timer timer = new Timer();
