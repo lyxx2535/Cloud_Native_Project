@@ -35,7 +35,7 @@ pipeline {
                 echo "3. Image Build Stage"
                 sh 'docker build -f Dockerfile --build-arg jar_name=target/cloud-native-project-0.0.1-SNAPSHOT.jar -t cloud-native-project:${BUILD_ID} . '
                 //打tag是为了上传到harbor镜像仓库，可以随时使用
-                sh 'docker tag cloud-native-project:${BUILD_ID} ${REGISTRY}/cloud-native-project:${BUILD_ID}'
+                sh 'docker tag cloud-native-project:${BUILD_ID} $REGISTRY/cloud-native-project:${BUILD_ID}'
             }
         }
         stage('Push') {//第四步：推送镜像
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 echo "4. Push Docker Image Stage"
                 sh "docker login --username=nju04 harbor.edu.cn -p nju042022"
-                sh "docker push ${REGISTRY}/cloud-native-project:${BUILD_ID}"
+                sh "docker push $REGISTRY/cloud-native-project:${BUILD_ID}"
             }
         }
     }
@@ -53,9 +53,9 @@ pipeline {
 
 node('slave') {
     container('jnlp-kubectl') {
-        stage('connect'){
-            sh 'curl "http://p.nju.edu.cn/portal_io/login" --data "username=201250215&password=lyx20020305"'
-        }
+//         stage('connect'){
+//             sh 'curl "http://p.nju.edu.cn/portal_io/login" --data "username=201250215&password=lyx20020305"'
+//         }
         stage('Clone YAML') {//第五步：拉取代码，为了部署到k8s
             echo "5. Git clone YAML To Slave"
             git branch: 'main', url: "https://github.com/lyxx2535/Cloud_Native_Project.git"
