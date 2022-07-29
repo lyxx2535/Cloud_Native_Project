@@ -33,6 +33,8 @@ pipeline {
             }
             steps {
                 echo "3. Image Build Stage"
+                sh 'docker rm -f cloud-native-project || true'
+                sh 'docker rmi cloud-native-project:${BUILD_ID} || true'
                 sh 'docker build -f Dockerfile --build-arg jar_name=target/cloud-native-project-0.0.1-SNAPSHOT.jar -t cloud-native-project:${BUILD_ID} . '
                 //打tag是为了上传到harbor镜像仓库，可以随时使用
                 sh 'docker tag cloud-native-project:${BUILD_ID} $REGISTRY/cloud-native-project:${BUILD_ID}'
