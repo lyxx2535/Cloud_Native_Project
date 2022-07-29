@@ -6,7 +6,7 @@ metadata:
   name: cloud-native-project
   namespace: nju04
 spec:
-  replicas: 1 #运行容器的副本数
+  replicas: 3 #运行容器的副本数
   selector:
     matchLabels:
       app: cloud-native-project

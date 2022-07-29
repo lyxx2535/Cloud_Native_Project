@@ -70,7 +70,6 @@ node('slave') {
             echo "7. Deploy To K8s Stage"
             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project.yaml -n nju04'
             sh 'kubectl apply -f ./jenkins/scripts/cloud-native-project-serviceMonitor.yaml'
-
         }
         stage('RTF Test'){//单元测试
             echo "RTF Test Stage"
