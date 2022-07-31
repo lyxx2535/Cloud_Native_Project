@@ -13,7 +13,7 @@ public class GreetingController {
     private GreetingService greetingService;
 
     @GetMapping("/greeting")
-//    @RequestLimit(count=100)
+    @RequestLimit(count=100)
     public Object greeting() {
         return greetingService.greeting();
     }
